@@ -1,0 +1,7 @@
+node counter returns (cnt : int)
+var v : int;
+let
+  cnt = 0 fby v;
+  v = (cnt + 1)
+tel
+

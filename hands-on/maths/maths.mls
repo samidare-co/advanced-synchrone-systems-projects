@@ -1,0 +1,27 @@
+node identite(x : int) returns (y : int)
+let
+  y = x
+tel
+
+node pi_euler returns (pi : float; euler : float; irrationnel : bool)
+let
+  irrationnel = true;
+  euler = 2.718000;
+  pi = 3.140000
+tel
+
+node perfect_numbers returns (p1 : int; p2 : int; irrationnel : bool)
+let
+  irrationnel = false;
+  p2 = 28;
+  p1 = 6
+tel
+
+node sum returns (s : int)
+var z : bool; i : int; y : int; x : int;
+let
+  s = (x + y);
+  (x, y, z) = perfect_numbers();
+  i = 0
+tel
+

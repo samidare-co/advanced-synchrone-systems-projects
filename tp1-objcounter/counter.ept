@@ -1,4 +1,4 @@
 node counter () returns (cnt:int)
 let
-cnt = 0 fby (cnt+1) ;
+    cnt = 0 fby (cnt+1) ;
 tel

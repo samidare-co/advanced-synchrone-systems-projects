@@ -1,0 +1,7 @@
+open FileB
+node foo(i : int) returns (o : int)
+let
+  () = FileB.print_io(i, o);
+  o = (i * 2)
+tel
+

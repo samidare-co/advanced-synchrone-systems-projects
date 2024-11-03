@@ -22,4 +22,4 @@ gcc -o gnc extern.o main.o gnc.o
 
 # Nettoyage
 # rm -Rf *~ *.o *.epci *.mls *.log gnc_c 
-rm -Rf *~ *.o *.epci *.mls *.log  
+#rm -Rf *~ *.o *.epci *.mls *.log  

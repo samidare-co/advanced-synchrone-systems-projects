@@ -1,0 +1,2 @@
+
+fun print_io(i:int; o:int) returns()

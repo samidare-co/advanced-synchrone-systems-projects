@@ -1,0 +1,48 @@
+
+node identite(x:int) returns (y:int)
+let
+    y = x  ; 
+tel
+
+node pi_euler() returns(pi, euler: float; irrationnel: bool)
+let 
+    pi = 3.14; 
+    euler = 2.718; 
+    irrationnel = true; 
+tel 
+
+node perfect_numbers() returns(p1, p2:int; irrationnel : bool) 
+let 
+    p1 = 6 ; 
+    p2 = 28 ; 
+    irrationnel = false; 
+tel 
+
+node sum() returns (s: int)
+var 
+    x, y, i: int; 
+    z: bool; 
+let 
+    i = 0; 
+    (x, y, z) = perfect_numbers(); 
+    s = x + y ;  
+tel 
+
+(* anki : 
+- Compilation en C cree des structures et fonctions qui ont toujours la structure <nom du fichier ept avec premiere lettre en maj>__<nom du noeud>_<type> avec type soit la sortie out sous forme de structure, soit la declaration de l'etat sous forme de structure mem soit la fonction initialisation de l'etat reset, soit la fonction transition du transducer step 
+
+- Si fby n'est pas utilise alors il n'y a pas d'etat mem et de fonction reset en C 
+
+- Etapes de la compilation 
+
+- Structure du fichier final main.c : definition entrees, definition sortie, definition etat, initialisation etat, definition fonction de transition, boucle infinie
+
+- syntaxe variable locale 
+- Ordre d'instruction importe pas 
+- syntaxe x,y: int ; z : bool 
+- erreur causalite 
+- appel de fonction 
+- module A.f()
+- voir pdf guatto 
+
+*)

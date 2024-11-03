@@ -12,4 +12,4 @@ gcc -c -I./counter_c -I `heptc -where`/c counter_c/counter.c
 gcc -o counter main.o counter.o
 
 # Nettoyage
-rm -Rf *~ *.o *.epci *.mls *.log counter_c 
+#rm -Rf *~ *.o *.epci *.mls *.log counter_c 
