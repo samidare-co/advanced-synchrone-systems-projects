@@ -32,7 +32,7 @@ let
         (true ->
             { status = Ready;
               current_deadline = (current_date when c) + (ta.deadline when c);
-              left = random(ta.deadline when c) })
+              left = random(ta.capacity when c) })
         (false -> tsi whenot c)
 tel
 
