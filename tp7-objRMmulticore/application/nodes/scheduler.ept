@@ -17,6 +17,9 @@ sel_period = acc[0].speriod });
 search_result.sel_proc ;
 tel
 
+(*Utiliser  foldi pour extract_Proc, voir photos tableaux, ss[0][0] = etat, ss[0][1] = numero du cpu ou le run, ss[1][1] == numero du cpu...; o = [4 , 4] l'indice c'est le numero du cpu et 4 c'est lindice de la tache qui est lance dessus *)
+fun extract_proc(ts:task_status^ntasks) returns (o:int^nproc)
+
 
 fun complete(tasks : task_status^ntasks; task_end:bool^ntasks) returns (o:task_status^ntasks)
 let 
