@@ -33,6 +33,9 @@ tasks =
 
 
 
+(* acc for accumulator => periode cumulee *)
 type select_acc = { tid : int; speriod : int }
 
 type aux_type = { sel_proc : int ; sel_period : int }
+
+const nproc : int = 2

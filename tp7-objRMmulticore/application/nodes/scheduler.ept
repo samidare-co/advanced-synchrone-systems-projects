@@ -17,9 +17,28 @@ sel_period = acc[0].speriod });
 search_result.sel_proc ;
 tel
 
-(*Utiliser  foldi pour extract_Proc, voir photos tableaux, ss[0][0] = etat, ss[0][1] = numero du cpu ou le run, ss[1][1] == numero du cpu...; o = [4 , 4] l'indice c'est le numero du cpu et 4 c'est lindice de la tache qui est lance dessus *)
+(*Utiliser  foldi pour extract_Proc, voir photos tableaux, ss[0][0] = etat, ss[0][1] = numero du cpu surquel le run, ss[1][1] == numero du cpu...; o = [4 , 4] l'indice c'est le numero du cpu et 4 c'est lindice de la tache qui est lancee dessus *)
 fun extract_proc(ts:task_status^ntasks) returns (o:int^nproc)
+    const init:int^nproc= int_max^nproc
+    let
+    (*init ^ ntasks ? comme fonction scheduler ou rate_monotonic_mc ya un ^ntasks sur les parametres qui ne sont pas deja des tableaux de taille ntasks*)
+        o = foldi<<ntasks>> proc_task(ts, init)
+    tel
 
+fun proc_task( i:int; ts:task_status; tp:int^nproc) returns (o:int^nproc)
+let
+    (*comment elle sait sur quel tableau iterer ?*) 
+    (*ts^nproc ?*)
+    o = mapi<<nproc>> update_proc(i,ts,tp)
+
+tel
+
+fun update_proc(i:int ; select_task:int; ts:task_status; select_tp:int) returns (o:int) 
+let
+    o = if (ts.status = Running) and (ts.current_proc = i) then 
+        select_task 
+    else select_tp
+tel
 
 fun complete(tasks : task_status^ntasks; task_end:bool^ntasks) returns (o:task_status^ntasks)
 let 
@@ -87,6 +106,11 @@ else acc
 else acc
 tel
 
+
+fun select_tid(s:select_acc) returns (o : int)
+let
+o = s.tid ;
+tel
 
 fun select_tasks (ts:task_status^ntasks)
 returns(selected:int^nproc)
