@@ -13,22 +13,22 @@
 // generate one, the weak symbol below does its
 // magic.
 __attribute__((weak))
-__attribute__((noreturn))
+//__attribute__((noreturn))
 void mif_entry_point_cpu0(void) {
   for(;;) ;
 }
 __attribute__((weak))
-__attribute__((noreturn))
+//__attribute__((noreturn))
 void mif_entry_point_cpu1(void) {
   for(;;) ;
 }
 __attribute__((weak))
-__attribute__((noreturn))
+//__attribute__((noreturn))
 void mif_entry_point_cpu2(void) {
   for(;;) ;
 }
 __attribute__((weak))
-__attribute__((noreturn))
+//__attribute__((noreturn))
 void mif_entry_point_cpu3(void) {
   for(;;) ;
 }
@@ -54,23 +54,21 @@ void el0_main(uint64_t cpuid) {
   }
   while(bss_not_initialized) ;
 
-  // And now, the computation
-  /*
-  char strbuf[128] ;
-  snprintf(strbuf,127,"EL0:Core %d\n",cpuid) ;
-  console_puts(cpuid,strbuf) ;
-  */
-  
   switch(cpuid) {
   case 0:
     mif_entry_point_cpu0() ;
+    break ;
   case 1:
     mif_entry_point_cpu1() ;
+    break ;
   case 2:
     mif_entry_point_cpu2() ;
+    break ;
   case 3:
     mif_entry_point_cpu3() ;
-  default:
-    for(;;) ;
+    break ;
+  default: 
+    break ;
   }
+  for(;;) ;
 }

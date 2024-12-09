@@ -17,27 +17,32 @@ sel_period = acc[0].speriod });
 search_result.sel_proc ;
 tel
 
-(*Utiliser  foldi pour extract_Proc, voir photos tableaux, ss[0][0] = etat, ss[0][1] = numero du cpu surquel le run, ss[1][1] == numero du cpu...; o = [4 , 4] l'indice c'est le numero du cpu et 4 c'est lindice de la tache qui est lancee dessus *)
-fun extract_proc(ts:task_status^ntasks) returns (o:int^nproc)
-var init:int^nproc= int_max^nproc
-let
-    (*init ^ ntasks ? comme fonction scheduler ou rate_monotonic_mc ya un ^ntasks sur les parametres qui ne sont pas deja des tableaux de taille ntasks*)
-        o = foldi<<ntasks>> proc_task(ts, init)
-tel
-
-fun proc_task( i:int; ts:task_status; tp:int^nproc) returns (o:int^nproc)
-let
-    (*comment elle sait sur quel tableau iterer ?*) 
-    (*ts^nproc ?*)
-    o = mapi<<nproc>> update_proc(i,ts,tp)
-
-tel
-
 fun update_proc(i:int ; select_task:int; ts:task_status; select_tp:int) returns (o:int) 
 let
     o = if (ts.status = Running) and (ts.current_proc = i) then 
         select_task 
     else select_tp
+tel
+
+
+fun proc_task( ts:task_status;t_index:int ; tp_acc:int^nproc) returns (o:int^nproc)
+let
+    (*comment elle sait sur quel tableau iterer ?*) 
+    (*ts^nproc ?*)
+    if (ts.status = Running) then
+        o = [tp_acc with [ts.current_proc] = t_index ]; 
+    else
+        o = tp_acc  ;
+    (*o = mapi<<nproc>> update_proc(t_index,ts,tp_acc) ; *) 
+tel
+
+(*Utiliser  foldi pour extract_Proc, voir photos tableaux, ss[0][0] = etat, ss[0][1] = numero du cpu surquel le run, ss[1][1] == numero du cpu...; o = [4 , 4] l'indice c'est le numero du cpu et 4 c'est lindice de la tache qui est lancee dessus *)
+fun extract_proc(ts:task_status^ntasks) returns (o:int^nproc)
+var init:int^nproc; 
+let
+    init = ntasks ^ nproc;
+    (*init ^ ntasks ? comme fonction scheduler ou rate_monotonic_mc ya un ^ntasks sur les parametres qui ne sont pas deja des tableaux de taille ntasks*)
+    o = foldi<<ntasks>> proc_task(ts, init)
 tel
 
 fun complete(tasks : task_status^ntasks; task_end:bool^ntasks) returns (o:task_status^ntasks)
@@ -73,6 +78,7 @@ let
                 left = tsi.left - 1 }
         else tsi
 tel
+
 fun check_deadline(current_date: int; tsi: task_status; tid: int)
 returns (tso: task_status)
 var c: bool;
