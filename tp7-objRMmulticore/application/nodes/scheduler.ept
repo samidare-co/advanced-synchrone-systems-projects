@@ -19,11 +19,11 @@ tel
 
 (*Utiliser  foldi pour extract_Proc, voir photos tableaux, ss[0][0] = etat, ss[0][1] = numero du cpu surquel le run, ss[1][1] == numero du cpu...; o = [4 , 4] l'indice c'est le numero du cpu et 4 c'est lindice de la tache qui est lancee dessus *)
 fun extract_proc(ts:task_status^ntasks) returns (o:int^nproc)
-    const init:int^nproc= int_max^nproc
-    let
+var init:int^nproc= int_max^nproc
+let
     (*init ^ ntasks ? comme fonction scheduler ou rate_monotonic_mc ya un ^ntasks sur les parametres qui ne sont pas deja des tableaux de taille ntasks*)
         o = foldi<<ntasks>> proc_task(ts, init)
-    tel
+tel
 
 fun proc_task( i:int; ts:task_status; tp:int^nproc) returns (o:int^nproc)
 let
