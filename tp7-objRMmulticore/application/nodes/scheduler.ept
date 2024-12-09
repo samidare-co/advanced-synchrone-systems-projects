@@ -1,20 +1,21 @@
 open Externc 
 open Scheduler_data
 
-fun slp_aux (proc:int;sa:select_acc;acc:aux_type)
+fun slp_aux (sa:select_acc;proc:int; acc:aux_type)
 returns (o:aux_type)
 let
-if acc.sel_period < sa.speriod then
+o = if acc.sel_period < sa.speriod then
 { sel_proc = proc ; sel_period = sa.speriod }
 else acc
 tel
+
 fun select_largest_period(acc:select_acc^nproc) returns (lp:int)
 var search_result : aux_type ;
 let
 search_result =
-foldi<<nproc>> slp_aux (acc,{ sel_proc = 0 ;
-sel_period = acc[0].speriod });
-search_result.sel_proc ;
+foldi<<nproc>> slp_aux (acc,
+                        { sel_proc = 0 ; sel_period = (acc[0]).speriod} );
+lp = search_result.sel_proc ;
 tel
 
 fun update_proc(i:int ; select_task:int; ts:task_status; select_tp:int) returns (o:int) 
@@ -24,60 +25,39 @@ let
     else select_tp
 tel
 
-
 fun proc_task( ts:task_status;t_index:int ; tp_acc:int^nproc) returns (o:int^nproc)
 let
     (*comment elle sait sur quel tableau iterer ?*) 
     (*ts^nproc ?*)
+    o = 
     if (ts.status = Running) then
-        o = [tp_acc with [ts.current_proc] = t_index ]; 
+         [tp_acc with [ts.current_proc] = t_index ]
     else
-        o = tp_acc  ;
-    (*o = mapi<<nproc>> update_proc(t_index,ts,tp_acc) ; *) 
+        tp_acc  ;
 tel
 
 (*Utiliser  foldi pour extract_Proc, voir photos tableaux, ss[0][0] = etat, ss[0][1] = numero du cpu surquel le run, ss[1][1] == numero du cpu...; o = [4 , 4] l'indice c'est le numero du cpu et 4 c'est lindice de la tache qui est lancee dessus *)
 fun extract_proc(ts:task_status^ntasks) returns (o:int^nproc)
-var init:int^nproc; 
+var init_proc: int^nproc; 
 let
-    init = ntasks ^ nproc;
+    init_proc = ntasks ^ nproc;
     (*init ^ ntasks ? comme fonction scheduler ou rate_monotonic_mc ya un ^ntasks sur les parametres qui ne sont pas deja des tableaux de taille ntasks*)
-    o = foldi<<ntasks>> proc_task(ts, init)
+    o = foldi<<ntasks>> proc_task(ts, init_proc)
 tel
 
-fun complete(tasks : task_status^ntasks; task_end:bool^ntasks) returns (o:task_status^ntasks)
-let 
-    o = map<<ntasks>> update_task_status(tasks,task_end); 
-tel
-
-
-fun update_task_status(tasks:task_status, task_end:bool) returns (o:task_status)
+fun complete(tasks_map:task_status ; task_end:bool) returns (o:task_status)
 let 
     o = 
-        if tasks.status = Running then
+        if tasks_map.status = Running then
             if task_end then
-                { tasks with .status = Waiting }
+                { tasks_map with .status = Waiting }
             else
                 { status = Ready;
-                current_deadline = tasks.current_deadline ;
-                left = tasks.left - 1 }
-        else tasks
+                  current_proc = tasks_map.current_proc ; 
+                  current_deadline = tasks_map.current_deadline }
+        else tasks_map
 tel
 
-fun simulate(tsi:task_status) returns (o:task_status)
-let
-    o = 
-        if tsi.status = Running then
-            if tsi.left <=1 then
-                (* Normal termination, move to Waiting state *)
-                { tsi with .status = Waiting }
-            else
-                (* No termination, yet *)
-                { status = Ready;
-                current_deadline = tsi.current_deadline ;
-                left = tsi.left - 1 }
-        else tsi
-tel
 
 fun check_deadline(current_date: int; tsi: task_status; tid: int)
 returns (tso: task_status)
@@ -95,23 +75,24 @@ let
     tso = merge c
         (true ->
             { status = Ready;
-              current_deadline = (current_date when c) + (ta.deadline when c);
-              left = random(ta.capacity when c) })
+            (* faire un changement d'horloge *)
+            current_proc = tsi.current_proc; 
+              current_deadline = (current_date when c) + (ta.deadline when c) })
         (false -> tsi whenot c)
 tel
 
 fun select_aux(ts:task_status; ta:task_attributes; tid:int;
 acc:select_acc^nproc) returns (acc_o:select_acc^nproc)
+var lp : int ; 
 let
+lp = select_largest_period(acc);
 acc_o =
 if ts.status = Ready then
-lp = select_largest_period(acc);
-if ta.period < lp.period then
+if ta.period < lp then
 [ acc with [lp] = { tid = tid ; speriod = ta.period } ]
 else acc
 else acc
 tel
-
 
 fun select_tid(s:select_acc) returns (o : int)
 let
@@ -120,11 +101,11 @@ tel
 
 fun select_tasks (ts:task_status^ntasks)
 returns(selected:int^nproc)
-var tmp : select_acc ;
+var tmp : select_acc ^ nproc ;
 let
 tmp = foldi<<ntasks>> select_aux
 (ts,tasks,{ tid = ntasks; speriod =int_max }^nproc);
-selected = map<<nproc>> select_tid tmp ;
+selected = map<<nproc>> select_tid(tmp);
 tel
 
 fun update_selected(ts:task_status;selected:int^nproc;tid:int)
@@ -132,11 +113,10 @@ returns (tso:task_status)
 let
 tso = if (fold<<nproc>> (or)
 (map<<nproc>> (=) (selected,tid^nproc),
-false) then
+false)) then
 { ts with .status = Running }
 else ts
 tel
-
 
 fun rate_monotonic_mc(ts:task_status^ntasks)
 returns (tso:task_status^ntasks)
@@ -151,19 +131,11 @@ var ss : scheduler_state ;
 new_date : int ;
 tmp1,tmp2,tmp3,tmp4: task_status^ntasks ;
 let
-ss = init_state fby { current_date = new_date ; tasks = tmp4 };
+ss = init_sstate fby { current_date = new_date ; tasks = tmp4 };
 new_date = ss.current_date + 1 ; (* advance time by 1 *)
 tmp1 = map <<ntasks>> complete (ss.tasks,task_end) ;
 tmp2 = mapi<<ntasks>> check_deadline (new_date^ntasks,tmp1);
 tmp3 = map <<ntasks>> start_inst (new_date^ntasks,tmp2,tasks);
 tmp4 = rate_monotonic_mc(tmp3) ; (* scheduling policy *)
 task_run = extract_proc(tmp4) ;
-tel
-
-node main() returns ()
-var sstate, new_sstate: scheduler_state;
-let
-    new_sstate = scheduler(sstate);
-    sstate = init_sstate fby new_sstate;
-    () = print_scheduler_state(new_sstate);
 tel
