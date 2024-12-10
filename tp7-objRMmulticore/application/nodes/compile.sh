@@ -24,5 +24,5 @@ gcc  -I./ -I `heptc -where`/c -I ./scheduler_data_c/  -c main.c
 gcc main.o externc.o scheduler.o scheduler_data.o -o main
 
 # Nettyage
-rm -Rf *~ *.o *.epci *.mls *.logo scheduler_data_c scheduler_c 
-rm -Rf *~ *.o *.epci *.mls *.log  
+#rm -Rf *~ *.o *.epci *.mls *.logo scheduler_data_c scheduler_c 
+#rm -Rf *~ *.o *.epci *.mls *.log  

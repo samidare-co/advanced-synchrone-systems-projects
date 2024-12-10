@@ -76,7 +76,7 @@ let
         (true ->
             { status = Ready;
             (* faire un changement d'horloge *)
-            current_proc = tsi.current_proc; 
+            current_proc = tsi.current_proc when c; 
               current_deadline = (current_date when c) + (ta.deadline when c) })
         (false -> tsi whenot c)
 tel

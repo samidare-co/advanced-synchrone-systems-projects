@@ -30,7 +30,6 @@ void Externc__print_scheduler_state_step(Scheduler_data__scheduler_state ss, Ext
         printf("Tache %d\n", i+1); 
         printf("\techeance courante: %d\n", ss.tasks[i].current_deadline); 
         printf("\tstatus: %s\n", task_state_to_string(ss.tasks[i].status)); 
-        printf("\treste: %d\n", ss.tasks[i].left); 
     }
 }
 
