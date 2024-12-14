@@ -3,5 +3,10 @@
         "FILEA",
         "FILEB",
         "FILEC"
-    ]
+    ],
+    "files.associations": {
+        "scheduler.h": "c",
+        "__locale": "c",
+        "ios": "c"
+    }
 }
