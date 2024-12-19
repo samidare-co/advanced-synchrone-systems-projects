@@ -1,0 +1,50 @@
+type alpha = A|B|C
+type astate = X|Y|Z|Dead
+node automate(l : alpha) returns (accept : bool)
+var sprev : astate; s : astate; v : bool; v_1 : bool; v_2 : bool; v_3 : bool;
+    v_4 : bool; v_5 : bool; v_6 : bool; v_7 : bool; v_8 : bool; v_9 : bool;
+    v_10 : bool; v_11 : bool; v_12 : bool; v_13 : bool; v_14 : bool;
+    v_15 : bool; v_16 : astate; v_17 : astate; v_18 : astate; v_19 : bool;
+    v_20 : bool; v_21 : bool; v_22 : bool; v_23 : bool; v_24 : bool;
+    v_25 : bool; v_26 : bool; v_27 : bool; v_28 : bool; v_29 : bool;
+    v_30 : bool; v_31 : bool; v_32 : bool; v_33 : bool;
+let
+  accept = if v_19 then false else v_33;
+  v_33 = if v_20 then v_21 else v_32;
+  v_32 = pre v_31;
+  v_31 = if v_22 then v_23 else v_30;
+  v_30 = pre v_29;
+  v_29 = if v_24 then v_27 else v_28;
+  v_28 = pre false;
+  v_27 = (v_25 or v_26);
+  v_26 = (l = B);
+  v_25 = (l = A);
+  v_24 = true fby false;
+  v_23 = (l = B);
+  v_22 = true fby false;
+  v_21 = (l = C);
+  v_20 = true fby false;
+  v_19 = (s = Dead);
+  sprev = X fby s;
+  s = if v_3 then Y else v_18;
+  v_18 = if v_7 then Y else v_17;
+  v_17 = if v_11 then Z else v_16;
+  v_16 = if v_15 then Y else Dead;
+  v_15 = (v_13 & v_14);
+  v_14 = (sprev = Z);
+  v_13 = (true & v_12);
+  v_12 = (l = A);
+  v_11 = (v_9 & v_10);
+  v_10 = (sprev = Y);
+  v_9 = (true & v_8);
+  v_8 = (l = C);
+  v_7 = (v_5 & v_6);
+  v_6 = (sprev = Y);
+  v_5 = (true & v_4);
+  v_4 = (l = B);
+  v_3 = (v_1 & v_2);
+  v_2 = (sprev = X);
+  v_1 = (true & v);
+  v = (l = A)
+tel
+

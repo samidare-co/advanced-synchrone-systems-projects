@@ -1,0 +1,7 @@
+node alarme(x:int) returns (alarme:bool)
+var not_in : bool;
+let 
+    not_in = (x>2 or x< -2) ;
+    alarme = merge not_in (true -> true) 
+                            (false -> false)
+tel

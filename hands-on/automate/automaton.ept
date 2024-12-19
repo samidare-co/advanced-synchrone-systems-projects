@@ -1,0 +1,17 @@
+type alpha = A | B | C 
+
+type astate = X| Y| Z | Dead
+
+node automate (l : alpha) returns (accept : bool)
+
+var s, sprev : astate;
+let 
+    s = if (l, sprev) = (A, X) then Y
+        else if (l, sprev) = (B, Y) then Y
+        else if (l, sprev) = (C, Y) then Z 
+        else if (l, sprev) = (A, Z) then Y
+        else Dead; 
+    sprev = X fby s;
+    accept = (s=Z)
+    (* accept = if s = Dead then false else (l = C) fby (l = B) fby ((l = A) or (l=B)) fby false *)
+tel 

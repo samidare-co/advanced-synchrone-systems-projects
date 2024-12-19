@@ -1,0 +1,10 @@
+node min_flot(x : int) returns (y : int)
+var v : bool; v_1 : bool; v_2 : int; v_3 : int;
+let
+  y = if v then x else v_3;
+  v_3 = pre v_2;
+  v_2 = if v_1 then x else y;
+  v_1 = (x < y);
+  v = true fby false
+tel
+

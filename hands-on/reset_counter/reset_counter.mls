@@ -1,0 +1,9 @@
+node reset_counter(reset_bool : bool) returns (counter : int)
+var c : int; v : int; v_1 : int;
+let
+  counter = c;
+  c = if reset_bool then 0 else v_1;
+  v_1 = (v + 1);
+  v = 0 fby counter
+tel
+

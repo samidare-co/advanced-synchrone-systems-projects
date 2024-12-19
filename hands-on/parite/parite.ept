@@ -1,0 +1,8 @@
+
+node parite () returns (o : int)
+var x : int; h : bool;
+let
+x = 0 fby (x + 1);
+o = merge h x 0;
+h = true fby not h;
+tel

@@ -1,0 +1,4 @@
+node min_flot(x : int) returns (y : int)
+let
+    y = x fby if x <y then x else y; 
+tel
