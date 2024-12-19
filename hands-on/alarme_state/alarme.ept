@@ -1,0 +1,12 @@
+
+node alarme (x:int) returns (alarme:bool)
+var not_in , not_in_2 : bool; cpt:int; 
+let 
+    not_in  = if (x>2 or x<0) then true else false; 
+    not_in_2 = (x<0 or x>35);
+    (*alarme = if (not_in and not_in_2) then true else false; *)
+    cpt = 0 fby if (not_in) then cpt + 1 else 0;
+    alarme = if (cpt>2 and not_in_2) then true else false;
+
+
+tel
