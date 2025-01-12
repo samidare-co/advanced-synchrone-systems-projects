@@ -1,0 +1,36 @@
+const per : int = 5
+
+
+node modulo_cnt4() returns(cnt:int)
+let 
+    cnt = 0 fby if (cnt<3) then cnt+1 else 0 ; 
+tel 
+
+node modulo_cnt <<per : int>>() returns (cnt:int)
+let 
+    cnt = 0 fby if (cnt<per -1) then cnt+1 else 0 ;
+    (* 
+    METHODE 2 : 
+    cnt = 0 fby ((cnt +1) % per); 
+    *)
+tel 
+
+node modulo_off<<per : int; off:int>>() returns (cnt:int)
+let
+    cnt = 0 fby if (cnt<per + off - 1) then cnt+1 else 0 ; 
+tel
+
+node square <<per : int >>() returns(clk:bool) 
+var cpt:int  ;
+let
+    cpt = modulo_cnt<<2*per>>() ; 
+    clk = if (cpt<per) then true else false;
+tel 
+
+node main_app() returns (out:int)
+var cpt : int ; squared : bool ; 
+let 
+    cpt = modulo_cnt<<per>>();
+    squared = square<<per>>(); 
+    out = (if (cpt = 0) then 3 else 3 fby out+1); 
+tel 
